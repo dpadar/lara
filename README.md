@@ -23,6 +23,13 @@ DB_DATABASE=db_name
 DB_USERNAME=username
 DB_PASSWORD=password
 ```
+- run migrations ```php artisan migrate```
+- populate database with needed info ```php artisan db:seed```
+- optionally populate database with users
+```
+[user]$ php artisan tinker
+>>> User::factory()->count(30)->create();
+```
 - run ```php artisan serve```
 
 To deploy an application:
@@ -48,5 +55,7 @@ DB_DATABASE=db_name
 DB_USERNAME=username
 DB_PASSWORD=password
 ```
+- run migrations ```php artisan migrate```
+- populate database with available countries
 - configure sanctum stateful domains in ```config/sanctum.php```
 - you should also do steps from laravel's [guide](https://laravel.com/docs/8.x/deployment#introduction)
