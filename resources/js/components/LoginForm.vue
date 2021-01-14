@@ -68,7 +68,7 @@ export default {
 					password: this.password.data,
 				}).then( response => {
 					if (response.status == 200) {
-						window.location.replace(window.location.origin)
+						window.location.replace(window.location.origin);
 					}
 				});
 			});

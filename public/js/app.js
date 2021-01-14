@@ -5127,9 +5127,7 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       "default": false
     },
-    id: {
-      type: Number
-    }
+    id: String
   },
   computed: {
     firstnameValidity: function firstnameValidity() {
@@ -5156,6 +5154,11 @@ __webpack_require__.r(__webpack_exports__);
       return {
         'is-invalid': this.passwordConfirmation.data == '' ? false : this.passwordConfirmation.changed ? !(this.passwordConfirmation.data == this.password.data) : false
       };
+    },
+    countryValidity: function countryValidity() {
+      return {
+        'is-invalid': this.countries.selected != '' ? false : true
+      };
     }
   },
   created: function created() {
@@ -5164,41 +5167,77 @@ __webpack_require__.r(__webpack_exports__);
     axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/countries').then(function (response) {
       _this.countries.all = response.data;
     });
-  },
-  mounted: function mounted() {
-    var _this2 = this;
 
     if (this.edit) {
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/users/".concat(this.id)).then(function (resp) {
-        _this2.firstname = resp.data.firstname;
-        _this2.lastname = resp.data.lastname;
-        _this2.username = resp.data.username;
-        _this2.countries.selected = resp.data.country_code;
+        _this.firstname.data = resp.data.firstname;
+        _this.lastname.data = resp.data.lastname;
+        _this.username.data = resp.data.username;
+        _this.countries.selected = resp.data.country_code;
       });
     }
   },
   methods: {
     onSubmit: function onSubmit() {
-      var _this3 = this;
+      var _this2 = this;
 
-      if (!this.firstnameValidity['is-invalid'] && !this.lastnameValidity['is-invalid'] && !this.usernameValidity['is-invalid'] && !this.passwordValidity['is-invalid'] && !this.passwordMatchiness['is-invalid'] && this.country != '') {
-        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/sanctum/csrf-cookie').then(function (response) {
-          axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/users', {
-            firstname: _this3.firstname.data,
-            lastname: _this3.lastname.data,
-            username: _this3.username.data,
-            country: _this3.countries.selected,
-            password: _this3.password.data
-          }).then(function (response) {
+      // I know it's bad
+      switch (this.edit) {
+        case true:
+          axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/users/".concat(this.id), this.getValid()).then(function (response) {
             if (response.status == 200) {
-              _this3.$router.push('/');
+              window.location.replace(window.location.origin);
             }
           });
           ;
-        });
-      } else {
-        console.log('not ready');
+          break;
+
+        default:
+          if (!this.firstnameValidity['is-invalid'] && !this.lastnameValidity['is-invalid'] && !this.usernameValidity['is-invalid'] && !this.passwordValidity['is-invalid'] && !this.passwordMatchiness['is-invalid'] && this.countries.selected != '') {
+            axios__WEBPACK_IMPORTED_MODULE_0___default().get('/sanctum/csrf-cookie').then(function (response) {
+              axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/users', {
+                firstname: _this2.firstname.data,
+                lastname: _this2.lastname.data,
+                username: _this2.username.data,
+                country: _this2.countries.selected,
+                password: _this2.password.data
+              }).then(function (response) {
+                if (response.status == 200) {
+                  window.location.replace(window.location.origin);
+                }
+              });
+              ;
+            });
+          }
+
+          break;
       }
+    },
+    getValid: function getValid() {
+      var validFields = {};
+
+      if (this.firstname.data != '' && !this.firstnameValidity['is-invalid']) {
+        validFields.firstname = this.firstname.data;
+      }
+
+      if (this.lastname.data != '' && !this.lastnameValidity['is-invalid']) {
+        validFields.lastname = this.lastname.data;
+      }
+
+      if (this.username.data != '' && !this.usernameValidity['is-invalid']) {
+        validFields.username = this.username.data;
+      }
+
+      if (this.password.data != '' && !this.passwordValidity['is-invalid'] && !this.passwordMatchiness['is-invalid']) {
+        validFields.password = this.password.data;
+      }
+
+      if (this.countries.selected != '') {
+        validFields.country = this.countries.selected;
+      }
+
+      console.log(validFields);
+      return validFields;
     }
   }
 });
@@ -5306,7 +5345,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     id: {
-      type: Number
+      type: String
     }
   },
   components: {
@@ -5379,8 +5418,7 @@ __webpack_require__.r(__webpack_exports__);
       lastname: auth_user ? auth_user.lastname : '',
       username: auth_user ? auth_user.username : '',
       country_code: auth_user ? auth_user.country_code : '',
-      //admin: auth_user ? auth_user.admin == 1 ? true : false : '',
-      admin: auth_user ? true : ''
+      admin: auth_user ? auth_user.admin == 1 ? true : false : ''
     };
   },
   components: {

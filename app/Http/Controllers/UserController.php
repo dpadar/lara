@@ -68,7 +68,33 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+		$validated = $request->validate([
+			'firstname' => 'string|min:2|max:64',
+			'lastname' => 'string|min:2|max:64',
+			'username' => 'string|min:2|max:64',
+			'country' => 'string|size:2',
+			'password' => 'string|min:8|max:256',
+		]);
+
+		$user = User::where('id',$id)->firstOrFail();
+
+		if (array_key_exists('firstname', $validated)) {
+			$user->firstname = $validated['firstname'];
+		}
+		if (array_key_exists('lastname', $validated)) {
+			$user->lastname = $validated['lastname'];
+		}
+		if (array_key_exists('username', $validated)) {
+			$user->username = $validated['username'];
+		}
+		if (array_key_exists('country', $validated)) {
+			$user->country_code = $validated['country'];
+		}
+		if (array_key_exists('password', $validated)) {
+			$user->password = Hash::make($validated['password']);
+		}
+
+		$user->save();
     }
 
     /**

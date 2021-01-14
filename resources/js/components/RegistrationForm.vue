@@ -106,9 +106,7 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		id: {
-			type: Number
-		}
+		id: String,
 	},
 	computed: {
 		firstnameValidity() {
@@ -141,6 +139,11 @@ export default {
 				'is-invalid': this.passwordConfirmation.data == '' ? false : this.passwordConfirmation.changed ? 
 				!(this.passwordConfirmation.data == this.password.data) : false
 			}
+		},
+		countryValidity() {
+			return {
+				'is-invalid': this.countries.selected != '' ? false : true,
+			}
 		}
 	},
 	created() {
@@ -148,41 +151,69 @@ export default {
 		).then( response => {
 			this.countries.all = response.data;
 		});
-		
-	},
-	mounted() {
 		if (this.edit) {
 			axios.get(`/api/users/${this.id}`
 			).then( resp => {
-				this.firstname = resp.data.firstname;
-				this.lastname = resp.data.lastname;
-				this.username = resp.data.username;
+				this.firstname.data = resp.data.firstname;
+				this.lastname.data = resp.data.lastname;
+				this.username.data = resp.data.username;
 				this.countries.selected = resp.data.country_code;
 			})
 		}
 	},
 	methods: {
 		onSubmit() {
-			if (!this.firstnameValidity['is-invalid'] && !this.lastnameValidity['is-invalid'] &&
-			!this.usernameValidity['is-invalid'] && !this.passwordValidity['is-invalid'] &&
-			!this.passwordMatchiness['is-invalid'] && this.country != '') {
-			axios.get('/sanctum/csrf-cookie').then(response => {
-    			axios.post('/api/users', {
-					firstname: this.firstname.data,
-					lastname: this.lastname.data,
-					username: this.username.data,
-					country: this.countries.selected,
-					password: this.password.data,
-				}).then( response => {
-					if (response.status == 200) {
-						this.$router.push('/');
+			// I know it's bad
+			switch (this.edit) {
+				case true:
+					axios.put(`/api/users/${this.id}`, this.getValid()).then( response => {
+						if (response.status == 200) {
+							window.location.replace(window.location.origin);
+						}
+					});;
+					break;
+			
+				default:
+					if (!this.firstnameValidity['is-invalid'] && !this.lastnameValidity['is-invalid'] &&
+					!this.usernameValidity['is-invalid'] && !this.passwordValidity['is-invalid'] &&
+					!this.passwordMatchiness['is-invalid'] && this.countries.selected != '') {
+						axios.get('/sanctum/csrf-cookie').then(response => {
+							axios.post('/api/users', {
+								firstname: this.firstname.data,
+								lastname: this.lastname.data,
+								username: this.username.data,
+								country: this.countries.selected,
+								password: this.password.data,
+							}).then( response => {
+								if (response.status == 200) {
+									window.location.replace(window.location.origin);
+								}
+							});;
+						});
 					}
-				});;
-			});
-			} else {
-				console.log('not ready');
+					break;
 			}
 		},
+		getValid() {
+			let validFields = {};
+			if (this.firstname.data != '' && !this.firstnameValidity['is-invalid']) {
+				validFields.firstname = this.firstname.data;
+			}
+			if (this.lastname.data != '' && !this.lastnameValidity['is-invalid']) {
+				validFields.lastname = this.lastname.data;
+			}
+			if (this.username.data != '' && !this.usernameValidity['is-invalid']) {
+				validFields.username = this.username.data;
+			}
+			if (this.password.data != '' && !this.passwordValidity['is-invalid'] && !this.passwordMatchiness['is-invalid']) {
+				validFields.password = this.password.data;
+			}
+			if (this.countries.selected != '') {
+				validFields.country = this.countries.selected;
+			}
+			console.log(validFields);
+			return validFields;
+		}
 	}
 }
 </script>
