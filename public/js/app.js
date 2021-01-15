@@ -5092,6 +5092,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5235,6 +5237,14 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(validFields);
       return validFields;
+    },
+    deleteUser: function deleteUser() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().delete("/api/users/".concat(this.$route.params.id)).then(function (response) {
+        if (response.status == 200) {
+          window.location.replace(window.location.origin);
+        }
+      });
+      ;
     }
   }
 });
@@ -29572,10 +29582,30 @@ var render = function() {
         _c("label", { attrs: { for: "country" } }, [_vm._v("Your country")])
       ]),
       _vm._v(" "),
+      _vm.edit
+        ? _c(
+            "button",
+            { staticClass: "btn btn-primary my-2", attrs: { type: "submit" } },
+            [_vm._v("Edit")]
+          )
+        : _c(
+            "button",
+            { staticClass: "btn btn-primary my-2", attrs: { type: "submit" } },
+            [_vm._v("Register")]
+          ),
+      _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-primary my-2", attrs: { type: "submit" } },
-        [_vm._v("Register")]
+        {
+          staticClass: "btn btn-danger my-2",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.deleteUser()
+            }
+          }
+        },
+        [_vm._v("Delete")]
       )
     ]
   )
@@ -29610,17 +29640,29 @@ var render = function() {
       _c(
         "tbody",
         _vm._l(_vm.users, function(user) {
-          return _c("tr", { key: user.id }, [
-            _c("th", [_vm._v(_vm._s(user.id))]),
-            _vm._v(" "),
-            _c("td", [
-              _vm._v(_vm._s(user.firstname) + " " + _vm._s(user.lastname))
-            ]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(user.username))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(user.country_code))])
-          ])
+          return _c(
+            "tr",
+            {
+              key: user.id,
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.$router.push("/edit/" + user.id)
+                }
+              }
+            },
+            [
+              _c("th", [_vm._v(_vm._s(user.id))]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(_vm._s(user.firstname) + " " + _vm._s(user.lastname))
+              ]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(user.username))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(user.country_code))])
+            ]
+          )
         }),
         0
       )
@@ -29793,7 +29835,7 @@ var render = function() {
                       "router-link",
                       {
                         staticClass: "btn btn-secondary mt-2",
-                        attrs: { to: { name: "edit", query: { id: _vm.id } } }
+                        attrs: { to: "/edit/" + _vm.id }
                       },
                       [_vm._v("Edit")]
                     ),

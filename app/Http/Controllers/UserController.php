@@ -38,6 +38,9 @@ class UserController extends Controller
 
 		$user = new User;
 		
+		$validated['country_code'] = $validated['country'];
+		unset($validated['country']);
+
 		foreach ($validated as $key => $value) {
 			$user->{$key} = $value;
 		}
@@ -80,6 +83,10 @@ class UserController extends Controller
 		]);
 
 		$user = User::where('id', $id)->firstOrFail();
+
+		$validated['country_code'] = $validated['country'];
+		unset($validated['country']);
+
 		foreach ($validated as $key => $value) {
 			$user->{$key} = $value;
 		}

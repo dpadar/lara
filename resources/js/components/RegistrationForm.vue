@@ -65,7 +65,9 @@
 			</select>
 			<label for="country">Your country</label>
 		</div>
-		<button type="submit" class="btn btn-primary my-2">Register</button>
+		<button v-if="edit" type="submit" class="btn btn-primary my-2">Edit</button>
+		<button v-else type="submit" class="btn btn-primary my-2">Register</button>
+		<button @click.prevent="deleteUser()" class="btn btn-danger my-2">Delete</button>
 	</form>
 </template>
 
@@ -212,6 +214,13 @@ export default {
 			}
 			console.log(validFields);
 			return validFields;
+		},
+		deleteUser() {
+			axios.delete(`/api/users/${this.$route.params.id}`).then( response => {
+				if (response.status == 200) {
+					window.location.replace(window.location.origin);
+				}
+			});;
 		}
 	}
 }

@@ -20,4 +20,4 @@ Route::get('/countries', function (Request $request) {
 	return response()->json(DB::table('countries')->get());
 });
 
-Route::middleware(['auth', 'rights'])->apiResource('/users', UserController::class);
+Route::apiResource('/users', UserController::class);

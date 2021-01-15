@@ -11,7 +11,7 @@
 							Also, you're <template v-if="admin"><code>an admin</code></template>
 							<template v-else><code>not an admin</code></template>.
 						</p>
-						<router-link :to="{name: 'edit', query: {'id': id}}" class="btn btn-secondary mt-2">Edit</router-link>
+						<router-link :to="`/edit/${id}`" class="btn btn-secondary mt-2">Edit</router-link>
 						<hr>	
 					</div>
 					<div v-if="admin" class="mt-2 col-12 py-4 shadow-lg rounded-3">

@@ -10,7 +10,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="user in users" :key="user.id">
+				<tr v-for="user in users" :key="user.id" @click.prevent="$router.push(`/edit/${user.id}`)">
 					<th>{{ user.id }}</th>
 					<td>{{ user.firstname }} {{ user.lastname }}</td>
 					<td>{{ user.username }}</td>
