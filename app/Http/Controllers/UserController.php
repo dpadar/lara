@@ -17,6 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
+		$this->authorize('viewAny', User::class);
 		return response()->json(User::paginate(10));
     }
 
@@ -28,6 +29,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+		$this->authorize('create', User::class);
+
         $validated = $request->validate([
 			'firstname' => 'required|string|min:2|max:64',
 			'lastname' => 'required|string|min:2|max:64',
@@ -40,6 +43,7 @@ class UserController extends Controller
 		
 		$validated['country_code'] = $validated['country'];
 		unset($validated['country']);
+		$validated['password'] = Hash::make($validated['password']);
 
 		foreach ($validated as $key => $value) {
 			$user->{$key} = $value;
@@ -62,7 +66,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-		return response()->json(User::where('id',$id)->firstOrFail());
+		$user = User::where('id', $id)->firstOrFail();
+
+		$this->authorize('view', $user);
+
+		return response()->json($user);
     }
 
     /**
@@ -74,6 +82,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+		$this->authorize('update', User::class);
+
 		$validated = $request->validate([
 			'firstname' => 'string|min:2|max:64',
 			'lastname' => 'string|min:2|max:64',
@@ -86,6 +97,7 @@ class UserController extends Controller
 
 		$validated['country_code'] = $validated['country'];
 		unset($validated['country']);
+		$validated['password'] = Hash::make($validated['password']);
 
 		foreach ($validated as $key => $value) {
 			$user->{$key} = $value;
@@ -102,6 +114,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-		$user = User::where('id', $id)->delete();
+		$user = User::where('id', $id);
+
+		$this->authorize('forceDelete', User::class);
+
+		$user->delete();
     }
 }
