@@ -65,9 +65,11 @@
 			</select>
 			<label for="country">Your country</label>
 		</div>
-		<button v-if="edit" type="submit" class="btn btn-primary my-2">Edit</button>
+		<template v-if="edit">
+			<button type="submit" class="btn btn-primary my-2">Edit</button>
+			<button @click.prevent="deleteUser()" class="btn btn-danger my-2">Delete</button>
+		</template>
 		<button v-else type="submit" class="btn btn-primary my-2">Register</button>
-		<button @click.prevent="deleteUser()" class="btn btn-danger my-2">Delete</button>
 	</form>
 </template>
 

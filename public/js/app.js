@@ -5094,6 +5094,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -29583,31 +29585,37 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm.edit
-        ? _c(
-            "button",
-            { staticClass: "btn btn-primary my-2", attrs: { type: "submit" } },
-            [_vm._v("Edit")]
-          )
+        ? [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary my-2",
+                attrs: { type: "submit" }
+              },
+              [_vm._v("Edit")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger my-2",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.deleteUser()
+                  }
+                }
+              },
+              [_vm._v("Delete")]
+            )
+          ]
         : _c(
             "button",
             { staticClass: "btn btn-primary my-2", attrs: { type: "submit" } },
             [_vm._v("Register")]
-          ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger my-2",
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.deleteUser()
-            }
-          }
-        },
-        [_vm._v("Delete")]
-      )
-    ]
+          )
+    ],
+    2
   )
 }
 var staticRenderFns = []

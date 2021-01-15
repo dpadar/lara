@@ -27,6 +27,7 @@ DB_PASSWORD=croft
 [user]$ ./vendor/bin/sail artisan tinker
 >>> User::factory()->count(30)->create();
 ```
+- Default admin account login is ```admin``` and password ```P@ssw0rd```
 
 To deploy an application:
 ------
