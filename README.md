@@ -24,7 +24,7 @@ DB_PASSWORD=croft
 - populate database with needed info ```./vendor/bin/sail artisan db:seed```
 - optionally populate database with users
 ```
-[user]$ php artisan tinker
+[user]$ ./vendor/bin/sail artisan tinker
 >>> User::factory()->count(30)->create();
 ```
 
