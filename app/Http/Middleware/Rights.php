@@ -18,16 +18,16 @@ class Rights
     public function handle(Request $request, Closure $next)
     {
 		preg_match("/(?<=\/)[0-9]+$/", $request->path(), $matches);
-		if ($matches) {
+		if (array_key_exists(0, $matches)) {
 			$pathId = (int) $matches[0];
 		}
 		if (Auth::check()) {
 
-			if (Auth::user()->admin || ($pathId && Auth::user()->id == $pathId)) {
+			if (Auth::user()->admin || (isset($pathId) && Auth::user()->id == $pathId)) {
 				return $next($request);
 			}
 		}
 
-		return response($pathId, 403);
+		return response(json_encode(Auth::check()), 403);
 	}
 }

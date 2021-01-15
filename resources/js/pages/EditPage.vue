@@ -2,7 +2,7 @@
 	<div class="d-flex vh-100 align-items-center">
 		<main class="conteiner-fluid offset-1 col-4">
 			<h1>Here, the edit form:</h1>
-			<RegistrationForm :edit="true" :id="id" class="mt-3" />
+			<RegistrationForm :edit="true" class="mt-3" />
 		</main>
 	</div>
 </template>

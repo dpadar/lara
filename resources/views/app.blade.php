@@ -8,7 +8,7 @@
 <body>
 	<div id="app"></div>
 	<script>
-		window.auth_user = {!! Auth::check() ? json_encode(Auth::user()) : null !!};
+		window.auth_user = {!! Auth::check() ? json_encode(Auth::user()) : 'null' !!};
 	</script>
 	<script src="js/app.js"></script>
 </body>

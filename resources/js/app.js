@@ -30,14 +30,9 @@ const router = new VueRouter({
 			component: LoginPage,
 		},
 		{
-			path: '/edit',
+			path: '/edit/:id',
 			name: 'edit',
 			component: EditPage,
-			props(route) {
-				return {
-					id: route.query.id
-				}
-			}
 		},
 		{
 			path: '*',

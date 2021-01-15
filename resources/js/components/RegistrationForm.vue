@@ -106,7 +106,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		id: String,
 	},
 	computed: {
 		firstnameValidity() {
@@ -152,7 +151,7 @@ export default {
 			this.countries.all = response.data;
 		});
 		if (this.edit) {
-			axios.get(`/api/users/${this.id}`
+			axios.get(`/api/users/${this.$route.params.id}`
 			).then( resp => {
 				this.firstname.data = resp.data.firstname;
 				this.lastname.data = resp.data.lastname;
@@ -166,11 +165,11 @@ export default {
 			// I know it's bad
 			switch (this.edit) {
 				case true:
-					axios.put(`/api/users/${this.id}`, this.getValid()).then( response => {
+					axios.put(`/api/users/${this.$route.params.id}`, this.getValid()).then( response => {
 						if (response.status == 200) {
 							window.location.replace(window.location.origin);
 						}
-					});;
+					});
 					break;
 			
 				default:
@@ -188,7 +187,7 @@ export default {
 								if (response.status == 200) {
 									window.location.replace(window.location.origin);
 								}
-							});;
+							});
 						});
 					}
 					break;

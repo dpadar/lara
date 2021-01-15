@@ -16,10 +16,6 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/countries', function (Request $request) {
 	return response()->json(DB::table('countries')->get());
 });

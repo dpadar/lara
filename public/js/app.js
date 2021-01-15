@@ -5126,8 +5126,7 @@ __webpack_require__.r(__webpack_exports__);
     edit: {
       type: Boolean,
       "default": false
-    },
-    id: String
+    }
   },
   computed: {
     firstnameValidity: function firstnameValidity() {
@@ -5169,7 +5168,7 @@ __webpack_require__.r(__webpack_exports__);
     });
 
     if (this.edit) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/users/".concat(this.id)).then(function (resp) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/users/".concat(this.$route.params.id)).then(function (resp) {
         _this.firstname.data = resp.data.firstname;
         _this.lastname.data = resp.data.lastname;
         _this.username.data = resp.data.username;
@@ -5184,12 +5183,11 @@ __webpack_require__.r(__webpack_exports__);
       // I know it's bad
       switch (this.edit) {
         case true:
-          axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/users/".concat(this.id), this.getValid()).then(function (response) {
+          axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/users/".concat(this.$route.params.id), this.getValid()).then(function (response) {
             if (response.status == 200) {
               window.location.replace(window.location.origin);
             }
           });
-          ;
           break;
 
         default:
@@ -5206,7 +5204,6 @@ __webpack_require__.r(__webpack_exports__);
                   window.location.replace(window.location.origin);
                 }
               });
-              ;
             });
           }
 
@@ -5418,7 +5415,7 @@ __webpack_require__.r(__webpack_exports__);
       lastname: auth_user ? auth_user.lastname : '',
       username: auth_user ? auth_user.username : '',
       country_code: auth_user ? auth_user.country_code : '',
-      admin: auth_user ? auth_user.admin == 1 ? true : false : ''
+      admin: auth_user ? auth_user.admin == 1 ? true : false : false
     };
   },
   components: {
@@ -5567,14 +5564,9 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__.default({
     name: 'login',
     component: _pages_LoginPage__WEBPACK_IMPORTED_MODULE_2__.default
   }, {
-    path: '/edit',
+    path: '/edit/:id',
     name: 'edit',
-    component: _pages_EditPage__WEBPACK_IMPORTED_MODULE_5__.default,
-    props: function props(route) {
-      return {
-        id: route.query.id
-      };
-    }
+    component: _pages_EditPage__WEBPACK_IMPORTED_MODULE_5__.default
   }, {
     path: '*',
     component: _pages_NotFoundPage__WEBPACK_IMPORTED_MODULE_3__.default
@@ -29715,10 +29707,7 @@ var render = function() {
       [
         _c("h1", [_vm._v("Here, the edit form:")]),
         _vm._v(" "),
-        _c("RegistrationForm", {
-          staticClass: "mt-3",
-          attrs: { edit: true, id: _vm.id }
-        })
+        _c("RegistrationForm", { staticClass: "mt-3", attrs: { edit: true } })
       ],
       1
     )

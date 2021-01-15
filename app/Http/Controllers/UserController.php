@@ -38,12 +38,15 @@ class UserController extends Controller
 
 		$user = new User;
 		
-		$user->firstname = $validated['firstname'];
-		$user->lastname = $validated['lastname'];
-		$user->username = $validated['username'];
-		$user->country_code = $validated['country'];
-		$user->password = Hash::make($validated['password']);
-		$user->admin = false;
+		foreach ($validated as $key => $value) {
+			$user->{$key} = $value;
+		}
+
+		if (User::where('admin', true)->firstOrFail()) {
+			$user->admin = false;
+		} else {
+			$user->admin = true;
+		}
 
 		$user->save();
     }
@@ -76,22 +79,9 @@ class UserController extends Controller
 			'password' => 'string|min:8|max:256',
 		]);
 
-		$user = User::where('id',$id)->firstOrFail();
-
-		if (array_key_exists('firstname', $validated)) {
-			$user->firstname = $validated['firstname'];
-		}
-		if (array_key_exists('lastname', $validated)) {
-			$user->lastname = $validated['lastname'];
-		}
-		if (array_key_exists('username', $validated)) {
-			$user->username = $validated['username'];
-		}
-		if (array_key_exists('country', $validated)) {
-			$user->country_code = $validated['country'];
-		}
-		if (array_key_exists('password', $validated)) {
-			$user->password = Hash::make($validated['password']);
+		$user = User::where('id', $id)->firstOrFail();
+		foreach ($validated as $key => $value) {
+			$user->{$key} = $value;
 		}
 
 		$user->save();
@@ -105,6 +95,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+		$user = User::where('id', $id)->delete();
     }
 }

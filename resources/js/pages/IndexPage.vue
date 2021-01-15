@@ -51,7 +51,7 @@ export default {
 			lastname: auth_user ? auth_user.lastname : '',
 			username: auth_user ? auth_user.username : '',
 			country_code: auth_user ? auth_user.country_code : '',
-			admin: auth_user ? auth_user.admin == 1 ? true : false : '',
+			admin: auth_user ? auth_user.admin == 1 ? true : false : false,
 		}
 	},
 	components: {
